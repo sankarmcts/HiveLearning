@@ -11,6 +11,7 @@ $ jps
 4614 Jps
 (No other services are running. so we have to start them)
 
+// Start all daemons
 $ start-all.sh
 WARNING: Attempting to start all Apache Hadoop daemons as hadoop in 10 seconds.
 WARNING: This is not a recommended production deployment configuration.
@@ -23,4 +24,21 @@ Starting nodemanagers
 
 $hive
 
+
 // Now it will start
+
+but it shows SSL connection issue: 
+Thu Feb 21 13:01:59 IST 2019 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+
+// Here is the fix for that
+
+hadoop@hadoop:/usr/local/hive/conf$ sudo gedit hive-site.xml
+
+Add :  useSSL=false with HTML encode.
+
+ <property>
+      <name>javax.jdo.option.ConnectionURL</name>
+      <value>jdbc:mysql://localhost/metastore?createDatabaseIfNotExist=true&amp;useSSL=false</value>
+      <description>metadata is stored in a MySQL server</description>
+   </property>
