@@ -1,0 +1,160 @@
+// start hive
+$ hive
+
+// display all databases
+hive> show databases;
+OK
+default
+joy
+ultimate
+Time taken: 0.74 seconds, Fetched: 3 row(s)
+
+
+// make a new database
+hive> create database sara;
+OK
+Time taken: 0.301 seconds
+hive> use sara;
+OK
+
+// create a table
+hive> create table if not exists customers (id bigint, name string, address string);
+OK
+
+// display all column names of a table with data type
+hive> describe customers;
+OK
+id                  	bigint              	                    
+name                	string              	                    
+address             	string              	                    
+Time taken: 0.219 seconds, Fetched: 3 row(s)
+
+
+// add new row
+hive> insert into customers values(101,"Johny","WA");
+
+
+hive>   select * from customers;
+OK
+101	Johny	WA
+Time taken: 0.289 seconds, Fetched: 1 row(s)
+
+
+hive>  insert into customers values (102,"Bramma","IN"), (103,"Ravi","IN"), (104,"Janani","UK");
+
+
+hive> select * from customers;
+OK
+101	Johny	WA
+102	Bramma	IN
+103	Ravi	IN
+104	Janani	UK
+Time taken: 0.238 seconds, Fetched: 4 row(s)
+
+
+hive> select * from customers where address ='IN';
+OK
+102	Bramma	IN
+103	Ravi	IN
+Time taken: 0.347 seconds, Fetched: 2 row(s)
+
+
+hive> select * from customers where address like ('UK');
+OK
+104	Janani	UK
+Time taken: 0.259 seconds, Fetched: 1 row(s)
+
+
+ 
+
+
+hive> select name,address from customers order by address desc;
+OK
+Johny	WA
+Janani	UK
+Ravi	IN
+Bramma	IN
+
+hive> select count(*) from customers;
+OK
+4
+
+//grouping operation
+hive> select address,count(*) from customers group by address;
+IN	2
+UK	1
+WA	1
+
+hive>  create table if not exists orders (id bigint, product_id string, customer_id bigint, quantity int, amount double);
+OK
+Time taken: 0.15 seconds
+
+hive>   insert into orders values (1,'camera',101,1,5200),(2,'t-shirt',102,2,300),(3,'painbalm',103,3,50);
+
+
+hive> describe customers;
+OK
+id                  	bigint              	                    
+name                	string              	                    
+address             	string              	                    
+Time taken: 0.073 seconds, Fetched: 3 row(s)
+
+
+hive> describe orders;
+OK
+id                  	bigint              	                    
+product_id          	string              	                    
+customer_id         	bigint              	                    
+quantity            	int                 	                    
+amount              	double              	                    
+Time taken: 0.075 seconds, Fetched: 5 row(s)
+
+hive> select * from customers;
+OK
+101	Johny	WA
+102	Bramma	IN
+103	Ravi	IN
+104	Janani	UK
+Time taken: 0.263 seconds, Fetched: 4 row(s)
+
+hive> select * from orders;
+OK
+1	camera	101	1	5200.0
+2	t-shirt	102	2	300.0
+3	painbalm	103	3	50.0
+
+
+// Joing of 2 tables customers and orders:
+hive> select c.id,c.name,c.address,o.product_id,o.quantity,o.amount from customers c join orders o where c.id = o.customer_id;
+101	Johny	WA	camera	1	5200.0
+102	Bramma	IN	t-shirt	2	300.0
+103	Ravi	IN	painbalm	3	50.0
+
+
+// create a duplicate table
+hive> create table if not exists fresh_orders like orders;
+OK
+Time taken: 0.183 seconds
+
+hive> create table if not exists fresh_customers like customers;
+OK
+Time taken: 0.129 seconds
+
+// drop entire table
+hive> drop table orders;
+OK
+Time taken: 0.482 seconds
+
+hive> drop table customers;
+OK
+Time taken: 0.238 seconds
+
+hive> show tables;
+OK
+fresh_customers
+fresh_orders
+
+hadoop@hadoop:/usr/local/hive/conf$ hdfs dfs -ls hdfs://localhost:9000/user/hive/warehouse/sara.db/
+Found 2 items
+drwxr-xr-x   - hadoop supergroup          0 2019-02-21 13:32 hdfs://localhost:9000/user/hive/warehouse/sara.db/fresh_customers
+drwxr-xr-x   - hadoop supergroup          0 2019-02-21 13:31 hdfs://localhost:9000/user/hive/warehouse/sara.db/fresh_orders
