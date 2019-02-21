@@ -18,7 +18,7 @@ hive> use sara;
 OK
 
 // create a table
-hive> create table if not exists customers (id bigint, name string, address string);
+hive> create table if not exists customers (id bigint, name string, country string);
 OK
 
 // display all column names of a table with data type
@@ -26,7 +26,7 @@ hive> describe customers;
 OK
 id                  	bigint              	                    
 name                	string              	                    
-address             	string              	                    
+country             	string              	                    
 Time taken: 0.219 seconds, Fetched: 3 row(s)
 
 
@@ -52,14 +52,14 @@ OK
 Time taken: 0.238 seconds, Fetched: 4 row(s)
 
 
-hive> select * from customers where address ='IN';
+hive> select * from customers where country ='IN';
 OK
 102	Bramma	IN
 103	Ravi	IN
 Time taken: 0.347 seconds, Fetched: 2 row(s)
 
 
-hive> select * from customers where address like ('UK');
+hive> select * from customers where country like ('UK');
 OK
 104	Janani	UK
 Time taken: 0.259 seconds, Fetched: 1 row(s)
@@ -68,7 +68,7 @@ Time taken: 0.259 seconds, Fetched: 1 row(s)
  
 
 
-hive> select name,address from customers order by address desc;
+hive> select name,country from customers order by country desc;
 OK
 Johny	WA
 Janani	UK
@@ -80,7 +80,7 @@ OK
 4
 
 //grouping operation
-hive> select address,count(*) from customers group by address;
+hive> select country,count(*) from customers group by country;
 IN	2
 UK	1
 WA	1
@@ -96,7 +96,7 @@ hive> describe customers;
 OK
 id                  	bigint              	                    
 name                	string              	                    
-address             	string              	                    
+country             	string              	                    
 Time taken: 0.073 seconds, Fetched: 3 row(s)
 
 
@@ -125,7 +125,7 @@ OK
 
 
 // Joing of 2 tables customers and orders:
-hive> select c.id,c.name,c.address,o.product_id,o.quantity,o.amount from customers c join orders o where c.id = o.customer_id;
+hive> select c.id,c.name,c.country,o.product_id,o.quantity,o.amount from customers c join orders o where c.id = o.customer_id;
 101	Johny	WA	camera	1	5200.0
 102	Bramma	IN	t-shirt	2	300.0
 103	Ravi	IN	painbalm	3	50.0
