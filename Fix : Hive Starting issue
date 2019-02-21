@@ -32,10 +32,8 @@ Thu Feb 21 13:01:59 IST 2019 WARN: Establishing SSL connection without server's 
 Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
 
 // Here is the fix for that
-
+//Add :  useSSL=false in ConnectionURL with HTML encode.
 hadoop@hadoop:/usr/local/hive/conf$ sudo gedit hive-site.xml
-
-Add :  useSSL=false with HTML encode.
 
  <property>
       <name>javax.jdo.option.ConnectionURL</name>
