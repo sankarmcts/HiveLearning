@@ -1,0 +1,26 @@
+$ hive
+
+Exception in thread "main" java.lang.RuntimeException: java.net.ConnectException: 
+Call From hadoop/127.0.1.1 to localhost:9000 failed on connection exception: 
+java.net.ConnectException: Connection refused; For more details 
+see:  http://wiki.apache.org/hadoop/ConnectionRefused
+
+
+// check currently running service hadoop daemons
+$ jps
+4614 Jps
+(No other services are running. so we have to start them)
+
+$ start-all.sh
+WARNING: Attempting to start all Apache Hadoop daemons as hadoop in 10 seconds.
+WARNING: This is not a recommended production deployment configuration.
+WARNING: Use CTRL-C to abort.
+Starting namenodes on [localhost]
+Starting datanodes
+Starting secondary namenodes [hadoop]
+Starting resourcemanager
+Starting nodemanagers
+
+$hive
+
+// Now it will start
